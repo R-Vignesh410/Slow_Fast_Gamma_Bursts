@@ -1,9 +1,9 @@
 # Differential Burst dynamics of Slow and Fast gamma rhythms in Macaque V1
-- Computed burst durations of slow and fast gamma (stimulus induced) produced in LFP recorded from V1 of two awake adult feamle monkeys
+- Computed burst durations of stimulus-induced slow and fast gamma rhythms in LFP signals recorded from area V1 of two awake adult female monkeys
 - Employed MP, OMP-GEAR, and HT to estimate burst durations
 - Measured functional connectivity (PLV and WPLI) across all pair of electrodes
 - Used WC network model (firing-rate) to simulate bursty slow and fast gamma rhythms
-- For further details refer to: https://doi.org/10.1101/2025.10.01.679813
+- For further details refer to: https://doi.org/10.1162/IMAG.a.1404
 ## Results
 - Slow gamma rhythm exhibited significantly longer burst durations and longer latencies as compared to fast gamma.
 - Slow gamma exhibited higher long-range synchrony compared to fast gamma.
