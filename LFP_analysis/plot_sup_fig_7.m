@@ -1,7 +1,7 @@
 clc;clear
 f=figure;
 f.WindowState="Maximized";
-plotHandles=getPlotHandles(2,2,[0.08 0.08 0.5 0.9],0.07,0.06,0);
+plotHandles=getPlotHandles(2,4,[0.08 0.08 0.9 0.9],0.07,0.06,0);
 for Monkey_num=1:2
     clearvars -except Monkey_num f plotHandles
     parent_file_path='C:\Users\rviiy\OneDrive - Indian Institute of Science\gamma_length_project_EEG_SRAYlab';
@@ -57,8 +57,6 @@ for Monkey_num=1:2
     power_gatherer_sg=zeros(1,num_elec);
     power_gatherer_fg=zeros(1,num_elec);
     freq_gatherer_bg=cell(1,num_elec);
-    duty_time_gatherer_sg=cell(1,num_elec);
-    duty_time_gatherer_fg=cell(1,num_elec);
     for i=current_electrode
         if Monkey_num==1
             load(fullfile(parent_file_path,'Decimated_8_LFP_data_alpa_H',LFP_data_file{i}))
@@ -104,19 +102,11 @@ for Monkey_num=1:2
             % onset_time_temp_trial_sg(onset_time_temp_trial_sg<0)=0; % Ensuring onset time is not before stimulus presentation
             onset_idx=(find((onset_time_temp_trial_sg)==min(onset_time_temp_trial_sg)));
             onset_temp_all_trials=[onset_temp_all_trials,onset_time_temp_trial_sg(onset_idx)]; 
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            start_point_temp_sg=time_center_temp_sg{ii}'-((length_temp_sg{ii}')*0.5);
-            end_point_temp_sg=time_center_temp_sg{ii}'+((length_temp_sg{ii}')*0.5);
-            % Compute overlap time among bursts
-            union_time_sg=compute_union(start_point_temp_sg,end_point_temp_sg);
-            duty_cycle_temp_sg=union_time_sg/0.8;
-            duty_cycle_all_trials=[duty_cycle_all_trials,duty_cycle_temp_sg];
         end
         length_gatherer_sg{counter}=length_temp_all_trials;
         freq_gatherer_sg{counter}=freq_temp_all_trials;
         onset_gatherer_sg{counter}=onset_temp_all_trials;
-        time_gatherer_sg{counter}=time_temp_all_trials;
-        duty_time_gatherer_sg{counter}=duty_cycle_all_trials;   
+        time_gatherer_sg{counter}=time_temp_all_trials; 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %%%%%% Fast gamma burst computation %%%%%%
         diffPower=getChangeInPower(data_temp,timeVals,stimulusPeriodS,baselinePeriodS,fast_gamma_freq);
@@ -151,16 +141,11 @@ for Monkey_num=1:2
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             start_point_temp_fg=time_center_temp_fg{ii}'-((length_temp_fg{ii}')*0.5);
             end_point_temp_fg=time_center_temp_fg{ii}'+((length_temp_fg{ii}')*0.5);
-            % Compute overlap time among bursts
-            union_time_fg=compute_union(start_point_temp_fg,end_point_temp_fg);
-            duty_cycle_temp_fg=union_time_fg/0.8;
-            duty_cycle_all_trials=[duty_cycle_all_trials,duty_cycle_temp_fg];
         end
         length_gatherer_fg{counter}=length_temp_all_trials;
         freq_gatherer_fg{counter}=freq_temp_all_trials;
         onset_gatherer_fg{counter}=onset_temp_all_trials;
         time_gatherer_fg{counter}=time_temp_all_trials;
-        duty_time_gatherer_fg{counter}=duty_cycle_all_trials;
         %%%%%%%%%%%%% broad gamma- freq wise computation %%%%%%%%%%%%%%%%%
         diffPower=getChangeInPower(data_temp,timeVals,stimulusPeriodS,baselinePeriodS,fast_gamma_freq_cont);
         thresholdFactor=thresholdFraction*sqrt(diffPower);
@@ -204,8 +189,6 @@ for Monkey_num=1:2
     SEM_onset_gatherer_fg=zeros(1,num_elec);
     mean_time_gatherer_sg=zeros(1,num_elec);
     mean_time_gatherer_fg=zeros(1,num_elec);
-    mean_duty_time_gatherer_sg=zeros(1,num_elec);
-    mean_duty_time_gatherer_fg=zeros(1,num_elec);
     good_elec_idx=[];
     for i=1:num_elec
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -227,8 +210,6 @@ for Monkey_num=1:2
         median_cycles_gatherer_fg(i)=median(cycles_temp_fg);
         SEM_cycles_gatherer_sg(i)=getSEMedian(cycles_temp_sg,1000);
         SEM_cycles_gatherer_fg(i)=getSEMedian(cycles_temp_fg,1000);
-        mean_duty_time_gatherer_sg(i)=mean(duty_time_gatherer_sg{i});
-        mean_duty_time_gatherer_fg(i)=mean(duty_time_gatherer_fg{i});
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Optimized bin number: 7 for both monkeys
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -248,8 +229,6 @@ for Monkey_num=1:2
             SEM_cycles_gatherer_fg(i)=0;
             median_cycles_gatherer_sg(i)=0;
             median_cycles_gatherer_fg(i)=0;
-            mean_duty_time_gatherer_sg(i)=0;
-            mean_duty_time_gatherer_fg(i)=0;
             num_bursts_gatherer_sg(i)=0;
             num_bursts_gatherer_fg(i)=0;
             continue;
@@ -276,8 +255,6 @@ for Monkey_num=1:2
     mean_time_gatherer_fg=mean_time_gatherer_fg(mean_time_gatherer_fg~=0);
     SEM_onset_gatherer_fg=SEM_onset_gatherer_fg(SEM_onset_gatherer_fg~=0);
     SEM_onset_gatherer_sg=SEM_onset_gatherer_sg(SEM_onset_gatherer_sg~=0);
-    mean_duty_time_gatherer_sg=mean_duty_time_gatherer_sg(mean_duty_time_gatherer_sg~=0);
-    mean_duty_time_gatherer_fg=mean_duty_time_gatherer_fg(mean_duty_time_gatherer_fg~=0);
     num_bursts_gatherer_sg=num_bursts_gatherer_sg(num_bursts_gatherer_sg~=0);
     num_bursts_gatherer_fg=num_bursts_gatherer_fg(num_bursts_gatherer_fg~=0);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -321,12 +298,13 @@ for Monkey_num=1:2
     xlabel('Frequency (Hz)');
     ylabel('Fraction of bursts');
     plot_bursts_PSD(plotHandles,Monkey_num);
+    plot_overlap_sg_fg(plotHandles,Monkey_num);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     set_axis_ticks_fontsize(plotHandles,22,16,Monkey_num);
 end    
-labels = {'A','B','C','D'};
-x_positions = [0.03, 0.325];
-y_positions = [0.88, 0.41];  % top and bottom rows
+labels = {'A','B','C','D','E','F','G','H'};
+x_positions = [0.03, 0.27, 0.51, 0.76];
+y_positions = [0.9, 0.42];  % top and bottom rows
 k = 1;
 for j = 1:length(y_positions)
     for i = 1:length(x_positions)
