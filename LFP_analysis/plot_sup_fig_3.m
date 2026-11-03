@@ -87,7 +87,7 @@ thresholdFactor=sqrt(thresholdFraction*diffPower);
 [~,~,~,~,~,~]= getBurstLengthMP_plot(data_temp,timeVals,thresholdFactor,displayFlag,stimulusPeriodS,baselinePeriodS,gamma_freq,num_iterations,0.9,dict_Size,gabor_temp_one_trial(:,1:200,:),header_temp_one_trial,plotHandles,1,1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\
 % plot the burst length at time burst center and y-axis frequency_measured
-load("Detected_burst_data_MP_sample_elec.mat","length_measured_sg","freq_measured_sg","time_measured_sg","length_measured_fg","freq_measured_fg","time_measured_fg");
+load("Detected_burst_data_MP_sample_elec_fig_S3.mat","length_measured_sg","freq_measured_sg","time_measured_sg","length_measured_fg","freq_measured_fg","time_measured_fg");
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 subplot(plotHandles(1,1));
 plot_bursts_on_TF_plot(length_measured_sg,length_measured_fg,...
